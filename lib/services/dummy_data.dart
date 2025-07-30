@@ -1,6 +1,5 @@
 import '../models/app_models.dart';
 
-
 class DummyDataService {
   static List<Expert> getExperts() {
     return [
@@ -9,10 +8,11 @@ class DummyDataService {
         name: 'Dr. Sarah Johnson',
         nameArabic: 'د. سارة جونسون',
         email: 'sarah.j@chatpro.com',
-        profileImage: "https://pixabay.com/get/gb463c8ac24ee253fb2afa8443273cef0454bafc517908164c95cbfdaef4b204bbcfabb158972f55d174879c0acaad0547d55bf66fff96303b7db8cea62efcbf8_1280.jpg",
-        bio: 'Board-certified physician with 15 years of experience in family medicine. Specializing in preventive care and chronic disease management.',
+        profileImage:
+            "https://pixabay.com/get/gb463c8ac24ee253fb2afa8443273cef0454bafc517908164c95cbfdaef4b204bbcfabb158972f55d174879c0acaad0547d55bf66fff96303b7db8cea62efcbf8_1280.jpg",
+        bio: 'board_certified_physician',
         category: ExpertCategory.doctor,
-        subcategories: ['General Medicine', 'Internal Medicine'],
+        subcategories: ['general_medicine', 'internal_medicine'],
         subcategoriesArabic: ['الطب العام', 'الطب الباطني'],
         languages: ['English', 'Arabic'],
         rating: 4.9,
@@ -44,8 +44,10 @@ class DummyDataService {
           ),
         ],
         verificationStatus: VerificationStatus.verified,
-        workExperience: 'MD from Harvard Medical School, 15 years in family medicine, former chief resident at Mass General.',
-        qualifications: 'Board-certified in Family Medicine, Fellow of American Academy of Family Physicians',
+        workExperience:
+            'MD from Harvard Medical School, 15 years in family medicine, former chief resident at Mass General.',
+        qualifications:
+            'Board-certified in Family Medicine, Fellow of American Academy of Family Physicians',
         country: 'United States',
         verificationAttachments: [
           {
@@ -73,10 +75,12 @@ class DummyDataService {
         name: 'Ahmed Al-Rashid',
         nameArabic: 'أحمد الراشد',
         email: 'ahmed.r@chatpro.com',
-        profileImage: "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
-        bio: 'Corporate lawyer with expertise in business contracts, intellectual property, and international law. Fluent in Arabic and English.',
+        profileImage:
+            "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
+        bio:
+            'Corporate lawyer with expertise in business contracts, intellectual property, and international law. Fluent in Arabic and English.',
         category: ExpertCategory.lawyer,
-        subcategories: ['Corporate Law', 'Intellectual Property'],
+        subcategories: ['corporate_law', 'intellectual_property'],
         subcategoriesArabic: ['القانون التجاري', 'الملكية الفكرية'],
         languages: ['Arabic', 'English'],
         rating: 4.8,
@@ -102,8 +106,10 @@ class DummyDataService {
           ),
         ],
         verificationStatus: VerificationStatus.verified,
-        workExperience: 'LLB from Cairo University, 12 years in corporate law, specializing in international business transactions.',
-        qualifications: 'Licensed attorney in Egypt and UAE, Member of International Bar Association',
+        workExperience:
+            'LLB from Cairo University, 12 years in corporate law, specializing in international business transactions.',
+        qualifications:
+            'Licensed attorney in Egypt and UAE, Member of International Bar Association',
         country: 'Egypt',
         verificationAttachments: [
           {
@@ -131,8 +137,10 @@ class DummyDataService {
         name: 'Maria Garcia',
         nameArabic: 'ماريا غارسيا',
         email: 'maria.g@chatpro.com',
-        profileImage: "https://pixabay.com/get/g94ee15922fe0b99ead203605a76c811d44b50875aa5c0d875203078cab8f45c7afe55e1386b1a6018fdbf637af0b3c0ee4b7076bb1b3abd3d5eee863feae9c56_1280.jpg",
-        bio: 'Licensed clinical psychologist specializing in anxiety, depression, and relationship counseling. Offering compassionate support.',
+        profileImage:
+            "https://pixabay.com/get/g94ee15922fe0b99ead203605a76c811d44b50875aa5c0d875203078cab8f45c7afe55e1386b1a6018fdbf637af0b3c0ee4b7076bb1b3abd3d5eee863feae9c56_1280.jpg",
+        bio:
+            'Licensed clinical psychologist specializing in anxiety, depression, and relationship counseling. Offering compassionate support.',
         category: ExpertCategory.therapist,
         subcategories: ['Cognitive Behavioral Therapy', 'Trauma Therapy'],
         subcategoriesArabic: ['العلاج المعرفي السلوكي', 'علاج الصدمات'],
@@ -150,8 +158,10 @@ class DummyDataService {
         todayEarnings: 280.00,
         avgSessionRating: 4.9,
         verificationStatus: VerificationStatus.verified,
-        workExperience: 'PhD in Clinical Psychology from Stanford, 8 years in private practice, specializing in trauma therapy.',
-        qualifications: 'Licensed Clinical Psychologist, Certified in EMDR and CBT',
+        workExperience:
+            'PhD in Clinical Psychology from Stanford, 8 years in private practice, specializing in trauma therapy.',
+        qualifications:
+            'Licensed Clinical Psychologist, Certified in EMDR and CBT',
         country: 'United States',
         verificationAttachments: [
           {
@@ -178,8 +188,10 @@ class DummyDataService {
         id: 'exp4',
         name: 'David Chen',
         email: 'david.c@chatpro.com',
-        profileImage: "https://pixabay.com/get/g22b7d7b09b60d8475e72da76399ef720c967f871e4c9b776a5183ac3ae483ef458124989e07b4069987870d0e7ff18aa5ddfe36f87a50196abb94da37cd4d2a4_1280.jpg",
-        bio: 'Business strategy consultant with MBA from Harvard. Helping startups and SMEs scale their operations and improve profitability.',
+        profileImage:
+            "https://pixabay.com/get/g22b7d7b09b60d8475e72da76399ef720c967f871e4c9b776a5183ac3ae483ef458124989e07b4069987870d0e7ff18aa5ddfe36f87a50196abb94da37cd4d2a4_1280.jpg",
+        bio:
+            'Business strategy consultant with MBA from Harvard. Helping startups and SMEs scale their operations and improve profitability.',
         category: ExpertCategory.businessConsultant,
         subcategories: ['Strategic Planning', 'Startup Consulting'],
         languages: ['English'],
@@ -196,8 +208,10 @@ class DummyDataService {
         todayEarnings: 350.00,
         avgSessionRating: 4.8,
         verificationStatus: VerificationStatus.underReview,
-        workExperience: 'MBA from Harvard Business School, 10 years in management consulting at McKinsey & Company.',
-        qualifications: 'CPA, Six Sigma Black Belt, Former McKinsey Senior Partner',
+        workExperience:
+            'MBA from Harvard Business School, 10 years in management consulting at McKinsey & Company.',
+        qualifications:
+            'CPA, Six Sigma Black Belt, Former McKinsey Senior Partner',
         country: 'United States',
         verificationAttachments: [
           {
@@ -230,8 +244,10 @@ class DummyDataService {
         id: 'exp5',
         name: 'Fatima Al-Zahra',
         email: 'fatima.z@chatpro.com',
-        profileImage: "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
-        bio: 'Certified life coach and motivational speaker. Helping individuals achieve personal growth and career success through structured guidance.',
+        profileImage:
+            "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
+        bio:
+            'Certified life coach and motivational speaker. Helping individuals achieve personal growth and career success through structured guidance.',
         category: ExpertCategory.lifeCoach,
         subcategories: ['Personal Development', 'Career Coaching'],
         languages: ['Arabic', 'English'],
@@ -248,8 +264,10 @@ class DummyDataService {
         todayEarnings: 280.00,
         avgSessionRating: 4.8,
         verificationStatus: VerificationStatus.verified,
-        workExperience: 'Certified Life Coach with 5 years of experience, specializing in personal development and career coaching.',
-        qualifications: 'ICF Certified Life Coach, NLP Practitioner, Motivational Speaker',
+        workExperience:
+            'Certified Life Coach with 5 years of experience, specializing in personal development and career coaching.',
+        qualifications:
+            'ICF Certified Life Coach, NLP Practitioner, Motivational Speaker',
         country: 'UAE',
         verificationAttachments: [
           {
@@ -270,8 +288,10 @@ class DummyDataService {
         id: 'exp6',
         name: 'Omar Hassan',
         email: 'omar.h@chatpro.com',
-        profileImage: "https://pixabay.com/get/g91bf7d271d9bf0d899efdefed903f76419ada1bd21bcfb3d15431ee568582e73aa03184c504b87eb88685c4fa72fa0adc054005e04a9ae5710539390b346b238_1280.jpg",
-        bio: 'Senior software engineer and technical consultant. Specializing in mobile app development, cloud architecture, and system optimization.',
+        profileImage:
+            "https://pixabay.com/get/g91bf7d271d9bf0d899efdefed903f76419ada1bd21bcfb3d15431ee568582e73aa03184c504b87eb88685c4fa72fa0adc054005e04a9ae5710539390b346b238_1280.jpg",
+        bio:
+            'Senior software engineer and technical consultant. Specializing in mobile app development, cloud architecture, and system optimization.',
         category: ExpertCategory.technician,
         subcategories: ['Mobile App Development', 'Cloud Computing'],
         languages: ['Arabic', 'English'],
@@ -288,8 +308,10 @@ class DummyDataService {
         todayEarnings: 195.50,
         avgSessionRating: 4.5,
         verificationStatus: VerificationStatus.verified,
-        workExperience: 'Senior Software Engineer with 8 years in mobile development and cloud architecture.',
-        qualifications: 'BS Computer Science, AWS Certified Solutions Architect, Google Cloud Professional',
+        workExperience:
+            'Senior Software Engineer with 8 years in mobile development and cloud architecture.',
+        qualifications:
+            'BS Computer Science, AWS Certified Solutions Architect, Google Cloud Professional',
         country: 'Jordan',
         verificationAttachments: [
           {
@@ -318,8 +340,10 @@ class DummyDataService {
         name: 'HealthCare Plus Clinic',
         nameArabic: 'عيادة هيلث كير بلاس',
         email: 'info@healthcareplus.com',
-        profileImage: "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
-        bio: 'Professional healthcare team with specialists in family medicine, pediatrics, and cardiology. Offering comprehensive medical consultations.',
+        profileImage:
+            "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
+        bio:
+            'Professional healthcare team with specialists in family medicine, pediatrics, and cardiology. Offering comprehensive medical consultations.',
         category: ExpertCategory.doctor,
         subcategories: ['General Medicine', 'Pediatrics', 'Cardiology'],
         subcategoriesArabic: ['الطب العام', 'طب الأطفال', 'أمراض القلب'],
@@ -338,7 +362,8 @@ class DummyDataService {
         avgSessionRating: 4.8,
         isBusinessExpert: true,
         teamName: 'HealthCare Plus Medical Team',
-        teamDescription: 'Our team consists of experienced doctors specializing in various medical fields to provide comprehensive healthcare services.',
+        teamDescription:
+            'Our team consists of experienced doctors specializing in various medical fields to provide comprehensive healthcare services.',
         teamMemberIds: ['exp8', 'exp9', 'exp10'],
         verificationAttachments: [],
       ),
@@ -347,8 +372,10 @@ class DummyDataService {
         id: 'exp8',
         name: 'Dr. John Smith',
         email: 'john.smith@healthcareplus.com',
-        profileImage: "https://pixabay.com/get/gb463c8ac24ee253fb2afa8443273cef0454bafc517908164c95cbfdaef4b204bbcfabb158972f55d174879c0acaad0547d55bf66fff96303b7db8cea62efcbf8_1280.jpg",
-        bio: 'Cardiologist with 12 years of experience. Specializes in heart disease prevention and treatment.',
+        profileImage:
+            "https://pixabay.com/get/gb463c8ac24ee253fb2afa8443273cef0454bafc517908164c95cbfdaef4b204bbcfabb158972f55d174879c0acaad0547d55bf66fff96303b7db8cea62efcbf8_1280.jpg",
+        bio:
+            'Cardiologist with 12 years of experience. Specializes in heart disease prevention and treatment.',
         category: ExpertCategory.doctor,
         subcategories: ['Cardiology'],
         languages: ['English'],
@@ -372,8 +399,10 @@ class DummyDataService {
         id: 'exp9',
         name: 'Dr. Lisa Wang',
         email: 'lisa.wang@healthcareplus.com',
-        profileImage: "https://pixabay.com/get/g94ee15922fe0b99ead203605a76c811d44b50875aa5c0d875203078cab8f45c7afe55e1386b1a6018fdbf637af0b3c0ee4b7076bb1b3abd3d5eee863feae9c56_1280.jpg",
-        bio: 'Pediatrician specializing in child health and development. Experienced in treating infants, children, and adolescents.',
+        profileImage:
+            "https://pixabay.com/get/g94ee15922fe0b99ead203605a76c811d44b50875aa5c0d875203078cab8f45c7afe55e1386b1a6018fdbf637af0b3c0ee4b7076bb1b3abd3d5eee863feae9c56_1280.jpg",
+        bio:
+            'Pediatrician specializing in child health and development. Experienced in treating infants, children, and adolescents.',
         category: ExpertCategory.doctor,
         subcategories: ['Pediatrics'],
         languages: ['English', 'Arabic'],
@@ -397,8 +426,10 @@ class DummyDataService {
         id: 'exp10',
         name: 'Dr. Michael Brown',
         email: 'michael.brown@healthcareplus.com',
-        profileImage: "https://pixabay.com/get/g22b7d7b09b60d8475e72da76399ef720c967f871e4c9b776a5183ac3ae483ef458124989e07b4069987870d0e7ff18aa5ddfe36f87a50196abb94da37cd4d2a4_1280.jpg",
-        bio: 'Family medicine physician with expertise in preventive care and chronic disease management.',
+        profileImage:
+            "https://pixabay.com/get/g22b7d7b09b60d8475e72da76399ef720c967f871e4c9b776a5183ac3ae483ef458124989e07b4069987870d0e7ff18aa5ddfe36f87a50196abb94da37cd4d2a4_1280.jpg",
+        bio:
+            'Family medicine physician with expertise in preventive care and chronic disease management.',
         category: ExpertCategory.doctor,
         subcategories: ['General Medicine'],
         languages: ['English'],
@@ -423,8 +454,10 @@ class DummyDataService {
         name: 'Al-Rashid Legal Associates',
         nameArabic: 'شركاء الراشد القانونية',
         email: 'info@alrashidlegal.com',
-        profileImage: "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
-        bio: 'Leading legal firm specializing in corporate law, real estate, and litigation. Our team of experienced lawyers provides comprehensive legal services.',
+        profileImage:
+            "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
+        bio:
+            'Leading legal firm specializing in corporate law, real estate, and litigation. Our team of experienced lawyers provides comprehensive legal services.',
         category: ExpertCategory.lawyer,
         subcategories: ['Corporate Law', 'Real Estate Law'],
         subcategoriesArabic: ['القانون التجاري', 'قانون العقار'],
@@ -443,7 +476,8 @@ class DummyDataService {
         avgSessionRating: 4.9,
         isBusinessExpert: true,
         teamName: 'Al-Rashid Legal Team',
-        teamDescription: 'Our legal team consists of specialized lawyers with expertise in various areas of law to serve all your legal needs.',
+        teamDescription:
+            'Our legal team consists of specialized lawyers with expertise in various areas of law to serve all your legal needs.',
         teamMemberIds: ['exp12', 'exp13'],
         verificationAttachments: [],
       ),
@@ -452,8 +486,10 @@ class DummyDataService {
         id: 'exp12',
         name: 'Saeed Al-Rashid',
         email: 'saeed@alrashidlegal.com',
-        profileImage: "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
-        bio: 'Senior partner specializing in corporate law and business transactions. Over 20 years of experience.',
+        profileImage:
+            "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
+        bio:
+            'Senior partner specializing in corporate law and business transactions. Over 20 years of experience.',
         category: ExpertCategory.lawyer,
         subcategories: ['Corporate Law'],
         languages: ['Arabic', 'English'],
@@ -477,8 +513,10 @@ class DummyDataService {
         id: 'exp13',
         name: 'Nora Al-Mansouri',
         email: 'nora@alrashidlegal.com',
-        profileImage: "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
-        bio: 'Real estate and property law specialist. Experienced in commercial and residential property transactions.',
+        profileImage:
+            "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
+        bio:
+            'Real estate and property law specialist. Experienced in commercial and residential property transactions.',
         category: ExpertCategory.lawyer,
         subcategories: ['Real Estate Law'],
         languages: ['Arabic', 'English'],
@@ -503,8 +541,10 @@ class DummyDataService {
         name: 'TechConsult Solutions',
         nameArabic: 'حلول تك كونسلت',
         email: 'info@techconsult.com',
-        profileImage: "https://pixabay.com/get/g8e1d44cdc30ab4c1eabdee6ef5adc8f4f926d64b9c51a24b4f5d09324ba3b8b3aea94b0d2eb0a5fdbc9a8e4f1b0fcaae04fd2edc734d5af64ea3aeb7ec55a9a93_1280.jpg",
-        bio: 'Leading technology consulting firm specializing in digital transformation, software development, and IT strategy. Our expert team helps businesses navigate the digital landscape.',
+        profileImage:
+            "https://pixabay.com/get/g8e1d44cdc30ab4c1eabdee6ef5adc8f4f926d64b9c51a24b4f5d09324ba3b8b3aea94b0d2eb0a5fdbc9a8e4f1b0fcaae04fd2edc734d5af64ea3aeb7ec55a9a93_1280.jpg",
+        bio:
+            'Leading technology consulting firm specializing in digital transformation, software development, and IT strategy. Our expert team helps businesses navigate the digital landscape.',
         category: ExpertCategory.technician,
         subcategories: ['Software Development', 'IT Consulting'],
         subcategoriesArabic: ['تطوير البرمجيات', 'استشارات تقنية'],
@@ -523,7 +563,8 @@ class DummyDataService {
         avgSessionRating: 4.8,
         isBusinessExpert: true,
         teamName: 'TechConsult Expert Team',
-        teamDescription: 'Our technology team consists of senior developers, system architects, and IT consultants with years of experience in various technologies.',
+        teamDescription:
+            'Our technology team consists of senior developers, system architects, and IT consultants with years of experience in various technologies.',
         teamMemberIds: ['exp15', 'exp16'],
         verificationAttachments: [],
       ),
@@ -532,8 +573,10 @@ class DummyDataService {
         id: 'exp15',
         name: 'David Kumar',
         email: 'david@techconsult.com',
-        profileImage: "https://pixabay.com/get/g8e1d44cdc30ab4c1eabdee6ef5adc8f4f926d64b9c51a24b4f5d09324ba3b8b3aea94b0d2eb0a5fdbc9a8e4f1b0fcaae04fd2edc734d5af64ea3aeb7ec55a9a93_1280.jpg",
-        bio: 'Senior Software Architect with expertise in cloud computing, microservices, and enterprise application development.',
+        profileImage:
+            "https://pixabay.com/get/g8e1d44cdc30ab4c1eabdee6ef5adc8f4f926d64b9c51a24b4f5d09324ba3b8b3aea94b0d2eb0a5fdbc9a8e4f1b0fcaae04fd2edc734d5af64ea3aeb7ec55a9a93_1280.jpg",
+        bio:
+            'Senior Software Architect with expertise in cloud computing, microservices, and enterprise application development.',
         category: ExpertCategory.technician,
         subcategories: ['Cloud Computing', 'Software Development'],
         languages: ['English'],
@@ -557,8 +600,10 @@ class DummyDataService {
         id: 'exp16',
         name: 'Sarah Ahmed',
         email: 'sarah@techconsult.com',
-        profileImage: "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
-        bio: 'DevOps Engineer and cybersecurity specialist focusing on secure cloud infrastructure and automation.',
+        profileImage:
+            "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
+        bio:
+            'DevOps Engineer and cybersecurity specialist focusing on secure cloud infrastructure and automation.',
         category: ExpertCategory.technician,
         subcategories: ['DevOps', 'Cybersecurity'],
         languages: ['English', 'Arabic'],
@@ -583,8 +628,10 @@ class DummyDataService {
         name: 'Wellness & Therapy Center',
         nameArabic: 'مركز العافية والعلاج',
         email: 'info@wellnesscenter.com',
-        profileImage: "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
-        bio: 'Comprehensive mental health and wellness center offering therapy, counseling, and life coaching services. Our team of licensed professionals provides personalized care.',
+        profileImage:
+            "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
+        bio:
+            'Comprehensive mental health and wellness center offering therapy, counseling, and life coaching services. Our team of licensed professionals provides personalized care.',
         category: ExpertCategory.therapist,
         subcategories: ['Marriage Counseling', 'Trauma Therapy'],
         subcategoriesArabic: ['استشارات زوجية', 'علاج الصدمات'],
@@ -603,7 +650,8 @@ class DummyDataService {
         avgSessionRating: 4.9,
         isBusinessExpert: true,
         teamName: 'Wellness Professional Team',
-        teamDescription: 'Our multidisciplinary team includes licensed therapists, psychologists, and life coaches dedicated to supporting your mental health and personal growth.',
+        teamDescription:
+            'Our multidisciplinary team includes licensed therapists, psychologists, and life coaches dedicated to supporting your mental health and personal growth.',
         teamMemberIds: ['exp18', 'exp19'],
         verificationAttachments: [],
       ),
@@ -612,8 +660,10 @@ class DummyDataService {
         id: 'exp18',
         name: 'Dr. Amanda Foster',
         email: 'amanda@wellnesscenter.com',
-        profileImage: "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
-        bio: 'Licensed Clinical Psychologist specializing in anxiety, depression, and relationship counseling. PhD in Clinical Psychology.',
+        profileImage:
+            "https://pixabay.com/get/g5e0546044477a75c5cee534b90336596cc1d420c76bbfbfc8ae622c1b778b56b13f3a1961f13e9199c18819b3783fe619d64f7286cce5edf45d00bda9d884018_1280.jpg",
+        bio:
+            'Licensed Clinical Psychologist specializing in anxiety, depression, and relationship counseling. PhD in Clinical Psychology.',
         category: ExpertCategory.therapist,
         subcategories: ['Cognitive Behavioral Therapy', 'Behavioral Therapy'],
         languages: ['English'],
@@ -637,8 +687,10 @@ class DummyDataService {
         id: 'exp19',
         name: 'Omar Al-Zahra',
         email: 'omar@wellnesscenter.com',
-        profileImage: "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
-        bio: 'Licensed Marriage and Family Therapist with expertise in couples counseling and family dynamics. Bilingual therapy services.',
+        profileImage:
+            "https://pixabay.com/get/g91005b1ef8d8657afde26a0fb46b9db7a67708f62bbbe3d142c764b1e30725c6f8bd301a2525ff6dae36e3175dc9b8666e57d8bda2323f561e86500342a6ea70_1280.jpg",
+        bio:
+            'Licensed Marriage and Family Therapist with expertise in couples counseling and family dynamics. Bilingual therapy services.',
         category: ExpertCategory.therapist,
         subcategories: ['Marriage Counseling', 'Family Therapy'],
         languages: ['Arabic', 'English'],
@@ -656,7 +708,8 @@ class DummyDataService {
         avgSessionRating: 4.8,
         parentBusinessId: 'exp17',
         verificationStatus: VerificationStatus.verified,
-        workExperience: 'Licensed Marriage and Family Therapist with 8 years of experience in couples counseling.',
+        workExperience:
+            'Licensed Marriage and Family Therapist with 8 years of experience in couples counseling.',
         qualifications: 'LMFT, Gottman Method Couples Therapy certified',
         country: 'UAE',
         verificationAttachments: [],
@@ -666,8 +719,10 @@ class DummyDataService {
         id: 'exp20',
         name: 'Dr. James Wilson',
         email: 'james.w@chatpro.com',
-        profileImage: "https://pixabay.com/get/g91bf7d271d9bf0d899efdefed903f76419ada1bd21bcfb3d15431ee568582e73aa03184c504b87eb88685c4fa72fa0adc054005e04a9ae5710539390b346b238_1280.jpg",
-        bio: 'Board-certified psychiatrist specializing in anxiety disorders and depression treatment.',
+        profileImage:
+            "https://pixabay.com/get/g91bf7d271d9bf0d899efdefed903f76419ada1bd21bcfb3d15431ee568582e73aa03184c504b87eb88685c4fa72fa0adc054005e04a9ae5710539390b346b238_1280.jpg",
+        bio:
+            'Board-certified psychiatrist specializing in anxiety disorders and depression treatment.',
         category: ExpertCategory.doctor,
         subcategories: ['Psychiatry', 'Mental Health'],
         languages: ['English'],
@@ -684,8 +739,10 @@ class DummyDataService {
         todayEarnings: 0.0,
         avgSessionRating: 0.0,
         verificationStatus: VerificationStatus.underReview,
-        workExperience: 'MD from Johns Hopkins, 12 years in psychiatry, residency at Massachusetts General Hospital.',
-        qualifications: 'Board-certified psychiatrist, Member of American Psychiatric Association',
+        workExperience:
+            'MD from Johns Hopkins, 12 years in psychiatry, residency at Massachusetts General Hospital.',
+        qualifications:
+            'Board-certified psychiatrist, Member of American Psychiatric Association',
         country: 'United States',
         verificationAttachments: [
           {
@@ -736,7 +793,8 @@ class DummyDataService {
         totalCost: 150.00,
         durationMinutes: 60,
         rating: 5.0,
-        review: 'Excellent consultation! Dr. Johnson was very professional and helpful.',
+        review:
+            'Excellent consultation! Dr. Johnson was very professional and helpful.',
         isPaidPerMinute: false,
       ),
       ConsultationSession(
@@ -746,7 +804,8 @@ class DummyDataService {
         type: SessionType.chat,
         status: SessionStatus.ended,
         startTime: DateTime.now().subtract(const Duration(days: 5)),
-        endTime: DateTime.now().subtract(const Duration(days: 5, hours: -0, minutes: -30)),
+        endTime: DateTime.now()
+            .subtract(const Duration(days: 5, hours: -0, minutes: -30)),
         totalCost: 120.00,
         durationMinutes: 30,
         rating: 4.5,
@@ -760,11 +819,13 @@ class DummyDataService {
         type: SessionType.voice,
         status: SessionStatus.ended,
         startTime: DateTime.now().subtract(const Duration(days: 7)),
-        endTime: DateTime.now().subtract(const Duration(days: 7, hours: -0, minutes: -45)),
+        endTime: DateTime.now()
+            .subtract(const Duration(days: 7, hours: -0, minutes: -45)),
         totalCost: 135.00,
         durationMinutes: 45,
         rating: 5.0,
-        review: 'Maria was incredibly understanding and provided great insights.',
+        review:
+            'Maria was incredibly understanding and provided great insights.',
         isPaidPerMinute: true,
       ),
     ];
@@ -776,7 +837,8 @@ class DummyDataService {
         id: 'msg1',
         senderId: 'client1',
         receiverId: 'exp1',
-        content: 'Hello Dr. Johnson, I have some questions about my recent symptoms.',
+        content:
+            'Hello Dr. Johnson, I have some questions about my recent symptoms.',
         type: MessageType.text,
         timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
         isRead: true,
@@ -785,7 +847,8 @@ class DummyDataService {
         id: 'msg2',
         senderId: 'exp1',
         receiverId: 'client1',
-        content: 'Hello! I\'m here to help. Please describe your symptoms in detail.',
+        content:
+            'Hello! I\'m here to help. Please describe your symptoms in detail.',
         type: MessageType.text,
         timestamp: DateTime.now().subtract(const Duration(minutes: 29)),
         isRead: true,
@@ -794,7 +857,8 @@ class DummyDataService {
         id: 'msg3',
         senderId: 'client1',
         receiverId: 'exp1',
-        content: 'I\'ve been experiencing headaches and fatigue for the past week.',
+        content:
+            'I\'ve been experiencing headaches and fatigue for the past week.',
         type: MessageType.text,
         timestamp: DateTime.now().subtract(const Duration(minutes: 28)),
         isRead: true,
@@ -803,7 +867,8 @@ class DummyDataService {
         id: 'msg4',
         senderId: 'exp1',
         receiverId: 'client1',
-        content: 'I understand your concern. How would you rate the intensity of your headaches on a scale of 1-10?',
+        content:
+            'I understand your concern. How would you rate the intensity of your headaches on a scale of 1-10?',
         type: MessageType.text,
         timestamp: DateTime.now().subtract(const Duration(minutes: 27)),
         isRead: true,
@@ -821,7 +886,8 @@ class DummyDataService {
         id: 'msg6',
         senderId: 'exp1',
         receiverId: 'client1',
-        content: 'Let me ask you a few more questions to better understand your condition. Are you experiencing any vision changes?',
+        content:
+            'Let me ask you a few more questions to better understand your condition. Are you experiencing any vision changes?',
         type: MessageType.text,
         timestamp: DateTime.now().subtract(const Duration(minutes: 25)),
         isRead: false,
@@ -928,7 +994,8 @@ class DummyDataService {
         id: 'apt7',
         clientId: 'client1',
         expertId: 'exp1',
-        scheduledTime: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
+        scheduledTime:
+            DateTime.now().subtract(const Duration(days: 1, hours: 2)),
         durationMinutes: 30,
         totalCost: 37.50,
         title: 'Quick Health Check',
@@ -943,7 +1010,8 @@ class DummyDataService {
         id: 'apt8',
         clientId: 'client2',
         expertId: 'exp2',
-        scheduledTime: DateTime.now().subtract(const Duration(days: 2, hours: 3)),
+        scheduledTime:
+            DateTime.now().subtract(const Duration(days: 2, hours: 3)),
         durationMinutes: 60,
         totalCost: 150.00,
         title: 'Legal Consultation',
@@ -1242,7 +1310,8 @@ class DummyDataService {
         createdAt: DateTime.now().subtract(const Duration(days: 30)),
         businessCode: 'BIZ-123456',
         verificationStatus: VerificationStatus.verified,
-        description: 'Leading technology consulting firm specializing in digital transformation and IT solutions.',
+        description:
+            'Leading technology consulting firm specializing in digital transformation and IT solutions.',
         website: 'https://techcorp.com',
         country: 'United States',
         verificationAttachments: [
@@ -1277,7 +1346,8 @@ class DummyDataService {
         createdAt: DateTime.now().subtract(const Duration(days: 20)),
         businessCode: 'BIZ-789012',
         verificationStatus: VerificationStatus.underReview,
-        description: 'Comprehensive healthcare services with a focus on preventive care and wellness.',
+        description:
+            'Comprehensive healthcare services with a focus on preventive care and wellness.',
         website: 'https://healthfirst.com',
         country: 'Canada',
         verificationAttachments: [
@@ -1306,7 +1376,8 @@ class DummyDataService {
         createdAt: DateTime.now().subtract(const Duration(days: 5)),
         businessCode: '',
         verificationStatus: VerificationStatus.unverified,
-        description: 'Full-service law firm providing corporate and individual legal services.',
+        description:
+            'Full-service law firm providing corporate and individual legal services.',
         website: null,
         country: 'United Kingdom',
         verificationAttachments: [

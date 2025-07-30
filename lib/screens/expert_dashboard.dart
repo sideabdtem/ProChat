@@ -80,7 +80,7 @@ class _ExpertDashboardState extends State<ExpertDashboard> {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          'Dashboard',
+          appState.translate('dashboard'),
           style: theme.textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -99,7 +99,9 @@ class _ExpertDashboardState extends State<ExpertDashboard> {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  _isOnline ? 'Online' : 'Offline',
+                  _isOnline
+                      ? appState.translate('online')
+                      : appState.translate('offline'),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: Colors.white,
                   ),
@@ -146,7 +148,7 @@ class _ExpertDashboardState extends State<ExpertDashboard> {
             const SizedBox(height: 16),
 
             // Statistics Cards
-            _buildStatisticsGrid(theme),
+            _buildStatisticsGrid(theme, appState),
             const SizedBox(height: 16),
 
             // Credit and Session Count Widget
@@ -194,7 +196,7 @@ class _ExpertDashboardState extends State<ExpertDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome back,',
+                      appState.translate('welcome_back'),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: Colors.white.withOpacity(0.8),
                       ),
@@ -213,7 +215,7 @@ class _ExpertDashboardState extends State<ExpertDashboard> {
           ),
           const SizedBox(height: 12),
           Text(
-            'You\'re doing great today! Keep up the excellent work.',
+            appState.translate('doing_great_today'),
             style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.white.withOpacity(0.9),
             ),
@@ -223,7 +225,7 @@ class _ExpertDashboardState extends State<ExpertDashboard> {
     );
   }
 
-  Widget _buildStatisticsGrid(ThemeData theme) {
+  Widget _buildStatisticsGrid(ThemeData theme, AppState appState) {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -233,28 +235,28 @@ class _ExpertDashboardState extends State<ExpertDashboard> {
       childAspectRatio: 1.6,
       children: [
         _buildStatCard(
-          title: 'Today\'s Earnings',
+          title: appState.translate('todays_earnings'),
           value: '\$245.80',
           icon: Icons.attach_money,
           color: Colors.green,
           theme: theme,
         ),
         _buildStatCard(
-          title: 'Time Online',
+          title: appState.translate('time_online'),
           value: '6h 32m',
           icon: Icons.access_time,
           color: Colors.blue,
           theme: theme,
         ),
         _buildStatCard(
-          title: 'Session Rating',
+          title: appState.translate('session_rating'),
           value: '4.8/5',
           icon: Icons.star,
           color: Colors.amber,
           theme: theme,
         ),
         _buildStatCard(
-          title: 'Total Clients',
+          title: appState.translate('total_clients'),
           value: '127',
           icon: Icons.people,
           color: Colors.purple,

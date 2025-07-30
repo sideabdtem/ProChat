@@ -144,7 +144,7 @@ class AppState extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final isDarkMode = prefs.getBool('isDarkMode') ?? false;
-      final language = prefs.getString('language') ?? 'en';
+      final language = prefs.getString('language') ?? _getDeviceLanguage();
       final region = prefs.getString('region') ?? 'All';
       final notificationsEnabled =
           prefs.getBool('notificationsEnabled') ?? true;
@@ -197,6 +197,19 @@ class AppState extends ChangeNotifier {
       default:
         return 'USD';
     }
+  }
+
+  String _getDeviceLanguage() {
+    final locale = WidgetsBinding.instance.window.locale;
+    final languageCode = locale.languageCode;
+
+    // Check if the device language is supported
+    if (TranslationService.getSupportedLanguages().contains(languageCode)) {
+      return languageCode;
+    }
+
+    // Default to English if device language is not supported
+    return 'en';
   }
 
   Future<void> _saveSettings() async {

@@ -271,12 +271,14 @@ class _ExpertProfileScreenState extends State<ExpertProfileScreen>
       child: Row(
         children: [
           Expanded(
-            child: _buildStatItem(
-              icon: Icons.star_rounded,
-              iconColor: Colors.amber,
-              value: widget.expert.rating.toStringAsFixed(1),
-              label: 'Rating',
-              theme: theme,
+            child: Consumer<AppState>(
+              builder: (context, appState, child) => _buildStatItem(
+                icon: Icons.star_rounded,
+                iconColor: Colors.amber,
+                value: widget.expert.rating.toStringAsFixed(1),
+                label: appState.translate('rating'),
+                theme: theme,
+              ),
             ),
           ),
           Container(
@@ -285,12 +287,14 @@ class _ExpertProfileScreenState extends State<ExpertProfileScreen>
             color: theme.colorScheme.outline.withOpacity(0.2),
           ),
           Expanded(
-            child: _buildStatItem(
-              icon: Icons.reviews_rounded,
-              iconColor: theme.colorScheme.primary,
-              value: widget.expert.totalReviews.toString(),
-              label: 'Reviews',
-              theme: theme,
+            child: Consumer<AppState>(
+              builder: (context, appState, child) => _buildStatItem(
+                icon: Icons.reviews_rounded,
+                iconColor: theme.colorScheme.primary,
+                value: widget.expert.totalReviews.toString(),
+                label: appState.translate('reviews'),
+                theme: theme,
+              ),
             ),
           ),
           Container(
@@ -305,7 +309,7 @@ class _ExpertProfileScreenState extends State<ExpertProfileScreen>
                 iconColor: Colors.green,
                 value:
                     '${appState.convertAndFormatPrice(widget.expert.pricePerMinute, 'USD')}',
-                label: 'Per Min',
+                label: appState.translate('per_minute_rate'),
                 theme: theme,
               ),
             ),
@@ -382,9 +386,7 @@ class _ExpertProfileScreenState extends State<ExpertProfileScreen>
           ),
           const SizedBox(height: 16),
           Text(
-            appState.isRTL && widget.expert.bioArabic != null
-                ? widget.expert.bioArabic!
-                : widget.expert.bio,
+            appState.translate(widget.expert.bio),
             style: theme.textTheme.bodyMedium?.copyWith(
               height: 1.5,
               color: theme.colorScheme.onSurface.withOpacity(0.8),
@@ -512,11 +514,13 @@ class _ExpertProfileScreenState extends State<ExpertProfileScreen>
                     color: theme.colorScheme.primary.withOpacity(0.3),
                   ),
                 ),
-                child: Text(
-                  specialization,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600,
+                child: Consumer<AppState>(
+                  builder: (context, appState, child) => Text(
+                    appState.translate(specialization),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               );

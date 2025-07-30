@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                'Next',
+                                _getLocalizedText('next', appState),
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onPrimary,
                                   fontWeight: FontWeight.w500,
@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           _buildCompactAppointmentButton(
                             appState,
                             theme,
-                            'change',
+                            _getLocalizedText('change', appState),
                             Icons.edit,
                             () =>
                                 _handleChangeAppointment(appState, appointment),
@@ -264,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           _buildCompactAppointmentButton(
                             appState,
                             theme,
-                            'cancel',
+                            _getLocalizedText('cancel', appState),
                             Icons.cancel,
                             () =>
                                 _handleCancelAppointment(appState, appointment),
@@ -273,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           _buildCompactAppointmentButton(
                             appState,
                             theme,
-                            'contact',
+                            _getLocalizedText('contact', appState),
                             Icons.chat,
                             () => _handleContactExpert(appState, appointment),
                           ),
@@ -298,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    'Swipe to view all',
+                    _getLocalizedText('swipe_to_view_all', appState),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurface.withOpacity(0.5),
                       fontSize: 10,
