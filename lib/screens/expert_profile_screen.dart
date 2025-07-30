@@ -17,6 +17,7 @@ import '../screens/sessions_history_screen.dart';
 import '../screens/notifications_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/payment_methods_screen.dart';
+import '../widgets/navigation_wrapper.dart';
 
 class ExpertProfileScreen extends StatefulWidget {
   final Expert expert;
@@ -74,43 +75,56 @@ class _ExpertProfileScreenState extends State<ExpertProfileScreen>
         appState.currentUser?.userType == UserType.expert &&
             appState.currentUser?.id == widget.expert.id;
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          _buildSliverAppBar(theme, appState),
-        ],
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 100),
-          child: SlideTransition(
-            position: _slideAnimation,
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  _buildQuickStats(theme),
-                  const SizedBox(height: 20),
-                  _buildAboutSection(theme, appState),
-                  const SizedBox(height: 20),
-                  _buildSpecializationsSection(theme, appState),
-                  if (!isCurrentUserExpert) ...[
+    return NavigationWrapper(
+      currentNavigationIndex: _getCurrentNavigationIndex(appState),
+      child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            _buildSliverAppBar(theme, appState),
+          ],
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 40),
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Column(
+                  children: [
                     const SizedBox(height: 20),
-                    _buildPricingSection(theme, appState),
+                    _buildQuickStats(theme),
                     const SizedBox(height: 20),
-                    _buildActionButtons(theme, appState),
+                    _buildAboutSection(theme, appState),
+                    const SizedBox(height: 20),
+                    _buildSpecializationsSection(theme, appState),
+                    if (!isCurrentUserExpert) ...[
+                      const SizedBox(height: 20),
+                      _buildPricingSection(theme, appState),
+                      const SizedBox(height: 20),
+                      _buildActionButtons(theme, appState),
+                    ],
+                    const SizedBox(height: 20),
+                    _buildReviewsSection(theme),
+                    const SizedBox(height: 20),
                   ],
-                  const SizedBox(height: 20),
-                  _buildReviewsSection(theme),
-                  const SizedBox(height: 20),
-                ],
+                ),
               ),
             ),
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(appState, theme),
     );
+  }
+
+  int _getCurrentNavigationIndex(AppState appState) {
+    final user = appState.currentUser;
+    if (user == null) {
+      return 0; // Guest - Home
+    } else if (user.userType == UserType.expert) {
+      return 0; // Expert - Home (where expert profiles are displayed)
+    } else {
+      return 0; // Regular user - Home
+    }
   }
 
   Widget _buildSliverAppBar(ThemeData theme, AppState appState) {
@@ -1033,237 +1047,7 @@ class _ExpertProfileScreenState extends State<ExpertProfileScreen>
     );
   }
 
-  Widget _buildBottomNavigationBar(AppState appState, ThemeData theme) {
-    final isExpert = appState.currentUser?.userType == UserType.expert;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: BottomNavigationBar(
-          currentIndex: 0,
-          onTap: (index) {
-            _handleNavigationTap(index, appState, isExpert);
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: theme.colorScheme.surface,
-          selectedItemColor: theme.colorScheme.primary,
-          unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-          selectedFontSize: 12,
-          unselectedFontSize: 10,
-          elevation: 0,
-          items: isExpert
-              ? [
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.dashboard_outlined),
-                    activeIcon: const Icon(Icons.dashboard),
-                    label: appState.translate('dashboard'),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.settings_outlined),
-                    activeIcon: const Icon(Icons.settings),
-                    label: appState.translate('settings'),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.person_outline),
-                    activeIcon: const Icon(Icons.person),
-                    label: appState.translate('profile'),
-                  ),
-                ]
-              : [
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.home_outlined),
-                    activeIcon: const Icon(Icons.home),
-                    label: appState.translate('home'),
-                  ),
-                  if (appState.currentUser != null) ...[
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.history_outlined),
-                      activeIcon: const Icon(Icons.history),
-                      label: appState.translate('session_history'),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Stack(
-                        children: [
-                          const Icon(Icons.notifications_outlined),
-                          if (appState.pendingNotifications.isNotEmpty)
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 12,
-                                  minHeight: 12,
-                                ),
-                                child: Text(
-                                  '${appState.pendingNotifications.length}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                      activeIcon: Stack(
-                        children: [
-                          const Icon(Icons.notifications),
-                          if (appState.pendingNotifications.isNotEmpty)
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 12,
-                                  minHeight: 12,
-                                ),
-                                child: Text(
-                                  '${appState.pendingNotifications.length}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                      label: appState.translate('notifications'),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.person_outline),
-                      activeIcon: const Icon(Icons.person),
-                      label: appState.translate('profile'),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.settings_outlined),
-                      activeIcon: const Icon(Icons.settings),
-                      label: appState.translate('settings'),
-                    ),
-                  ] else
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.login_outlined),
-                      activeIcon: const Icon(Icons.login),
-                      label: appState.translate('sign_in'),
-                    ),
-                ],
-        ),
-      ),
-    );
-  }
-
-  void _handleNavigationTap(int index, AppState appState, bool isExpert) {
-    if (isExpert) {
-      // Expert navigation
-      switch (index) {
-        case 0:
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ExpertNavigation(),
-            ),
-            (route) => false,
-          );
-          break;
-        case 1:
-          // Settings - stay on current page or navigate to expert settings
-          break;
-        case 2:
-          // Profile - navigate to expert profile
-          break;
-      }
-    } else if (appState.currentUser == null) {
-      // Guest user navigation - only Home and Sign In/Up
-      if (index == 0) {
-        // Navigate back to guest home
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const GuestMainNavigation(),
-          ),
-          (route) => false,
-        );
-      } else if (index == 1) {
-        // Navigate to auth screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AuthScreen(),
-          ),
-        );
-      }
-    } else {
-      // Logged-in user navigation (5 tabs: Home, Session History, Notifications, Profile, Settings)
-      switch (index) {
-        case 0:
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainNavigation(),
-            ),
-            (route) => false,
-          );
-          break;
-        case 1:
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainNavigation(initialIndex: 1),
-            ),
-            (route) => false,
-          );
-          break;
-        case 2:
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainNavigation(initialIndex: 2),
-            ),
-            (route) => false,
-          );
-          break;
-        case 3:
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainNavigation(initialIndex: 3),
-            ),
-            (route) => false,
-          );
-          break;
-        case 4:
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainNavigation(initialIndex: 4),
-            ),
-            (route) => false,
-          );
-          break;
-      }
-    }
-  }
 
   void _handleShareProfile(AppState appState) {
     final shareText = '''

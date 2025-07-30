@@ -14,6 +14,7 @@ import '../screens/appointment_booking_screen.dart';
 import '../screens/chat_screen.dart';
 import '../screens/team_page_screen.dart';
 import '../widgets/call_status_bar.dart';
+import '../widgets/navigation_wrapper.dart';
 
 class ExpertNavigation extends StatefulWidget {
   final int initialIndex;
@@ -65,28 +66,32 @@ class _ExpertNavigationState extends State<ExpertNavigation>
     });
   }
 
+  // Method to update current tab index from NavigationWrapper
+  void updateCurrentIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+      _overlayScreen = null; // Close any overlay when switching tabs
+    });
+    _animationController.reset();
+    _animationController.forward();
+  }
+
   // Method to create expert-wrapped screens that maintain navigation
   Widget _createExpertWrappedScreen(Widget screen) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const CallStatusBar(),
-          Expanded(child: screen),
-        ],
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(
-        context.watch<AppState>(),
-        Theme.of(context),
+    return NavigationWrapper(
+      currentNavigationIndex: _currentIndex,
+      child: Scaffold(
+        body: Column(
+          children: [
+            const CallStatusBar(),
+            Expanded(child: screen),
+          ],
+        ),
       ),
     );
   }
 
   Widget _getCurrentScreen(AppState appState, ThemeData theme) {
-    // If there's an overlay screen, show it with expert navigation
-    if (_overlayScreen != null) {
-      return _createExpertWrappedScreen(_overlayScreen!);
-    }
-
     switch (_currentIndex) {
       case 0:
         return HomeScreen(
@@ -125,85 +130,36 @@ class _ExpertNavigationState extends State<ExpertNavigation>
     final appState = context.watch<AppState>();
     final theme = Theme.of(context);
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.1, 0.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        );
-      },
-      child: _getCurrentScreen(appState, theme),
-    );
-  }
+    // If there's an overlay screen, show it with wrapped navigation
+    if (_overlayScreen != null) {
+      return _createExpertWrappedScreen(_overlayScreen!);
+    }
 
-  Widget _buildBottomNavigationBar(AppState appState, ThemeData theme) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-              _overlayScreen = null; // Close any overlay when switching tabs
-            });
-            _animationController.reset();
-            _animationController.forward();
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: theme.colorScheme.surface,
-          selectedItemColor: theme.colorScheme.primary,
-          unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-          elevation: 0,
-          selectedLabelStyle: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 11,
-          ),
-          items: [
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Icons.home_outlined, Icons.home, 0),
-              label: appState.translate('home'),
-            ),
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Icons.dashboard_outlined, Icons.dashboard, 1),
-              label: appState.translate('dashboard'),
-            ),
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Icons.history_outlined, Icons.history, 2),
-              label: appState.translate('sessions'),
-            ),
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Icons.business_outlined, Icons.business, 3),
-              label: appState.translate('business'),
-            ),
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Icons.settings_outlined, Icons.settings, 4),
-              label: appState.translate('settings'),
+    return NavigationWrapper(
+      currentNavigationIndex: _currentIndex,
+      child: Scaffold(
+        body: Column(
+          children: [
+            const CallStatusBar(),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.1, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  );
+                },
+                child: _getCurrentScreen(appState, theme),
+              ),
             ),
           ],
         ),
@@ -211,20 +167,5 @@ class _ExpertNavigationState extends State<ExpertNavigation>
     );
   }
 
-  Widget _buildNavIcon(IconData outlineIcon, IconData filledIcon, int index) {
-    final isSelected = _currentIndex == index;
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: isSelected
-            ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-            : Colors.transparent,
-      ),
-      child: Icon(
-        isSelected ? filledIcon : outlineIcon,
-        size: 24,
-      ),
-    );
-  }
+
 }

@@ -9,6 +9,7 @@ import '../screens/edit_profile_screen.dart';
 import '../screens/payment_methods_screen.dart';
 import '../screens/notifications_screen.dart';
 import '../widgets/call_status_bar.dart';
+import '../widgets/navigation_wrapper.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
@@ -62,6 +63,18 @@ class _MainNavigationState extends State<MainNavigation>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  // Method to update current tab index from NavigationWrapper
+  void updateCurrentIndex(int index) {
+    final maxIndex = _getMaxNavigationIndex(context.read<AppState>());
+    if (index <= maxIndex) {
+      setState(() {
+        _currentIndex = index;
+      });
+      _animationController.reset();
+      _animationController.forward();
+    }
   }
 
   Widget _getCurrentScreen(AppState appState, ThemeData theme) {
@@ -120,214 +133,39 @@ class _MainNavigationState extends State<MainNavigation>
       _currentIndex = 0;
     }
 
-    return Scaffold(
-      body: Column(
-        children: [
-          const CallStatusBar(),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 400),
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0.1, 0.0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  ),
-                );
-              },
-              child: _getCurrentScreen(appState, theme),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: appState.currentUser == null
-          ? _buildGuestBottomNavigationBar(appState, theme)
-          : _buildLoggedInBottomNavigationBar(appState, theme),
-    );
-  }
-
-  Widget _buildGuestBottomNavigationBar(AppState appState, ThemeData theme) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          final maxIndex = _getMaxNavigationIndex(appState);
-          if (index > maxIndex) return; // Safety check
-
-          if (index == 1) {
-            // Navigate to auth screen when Sign In/Up tab is tapped
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AuthScreen(),
-              ),
-            );
-          } else if (index != _currentIndex) {
-            _animationController.reset();
-            _animationController.forward();
-            setState(() {
-              _currentIndex = index;
-            });
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: theme.colorScheme.surface,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        selectedFontSize: 12,
-        unselectedFontSize: 10,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: appState.translate('home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.login_outlined),
-            activeIcon: Icon(Icons.login),
-            label: 'Sign In/Up',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLoggedInBottomNavigationBar(AppState appState, ThemeData theme) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          final maxIndex = _getMaxNavigationIndex(appState);
-          if (index > maxIndex) return; // Safety check
-
-          if (index != _currentIndex) {
-            _animationController.reset();
-            _animationController.forward();
-            setState(() {
-              _currentIndex = index;
-            });
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: theme.colorScheme.surface,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        selectedFontSize: 12,
-        unselectedFontSize: 10,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: appState.translate('home'),
-          ),
-          // Only show session history for logged-in users
-          if (appState.currentUser != null)
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history_outlined),
-              activeIcon: Icon(Icons.history),
-              label: appState.translate('session_history'),
-            ),
-          // Only show notifications for logged-in users
-          if (appState.currentUser != null)
-            BottomNavigationBarItem(
-              icon: Stack(
-                children: [
-                  Icon(Icons.notifications_outlined),
-                  if (appState.pendingNotifications.isNotEmpty)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: Text(
-                          '${appState.pendingNotifications.length}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+    return NavigationWrapper(
+      currentNavigationIndex: _currentIndex,
+      child: Scaffold(
+        body: Column(
+          children: [
+            const CallStatusBar(),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.1, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
                     ),
-                ],
+                  );
+                },
+                child: _getCurrentScreen(appState, theme),
               ),
-              activeIcon: Stack(
-                children: [
-                  Icon(Icons.notifications),
-                  if (appState.pendingNotifications.isNotEmpty)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: Text(
-                          '${appState.pendingNotifications.length}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              label: appState.translate('notifications'),
             ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: appState.translate('profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            activeIcon: Icon(Icons.settings),
-            label: appState.translate('settings'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+
+
 
   Widget _buildSessionHistoryScreen(AppState appState, ThemeData theme) {
     final sessions = appState.sessionHistory;
