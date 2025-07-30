@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../models/app_models.dart';
@@ -8,6 +9,7 @@ import '../screens/expert_profile_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/payment_methods_screen.dart';
 import '../screens/notifications_screen.dart';
+import '../screens/sessions_history_screen.dart';
 import '../widgets/call_status_bar.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -53,8 +55,8 @@ class _MainNavigationState extends State<MainNavigation>
       // Guest navigation: Home + Sign In/Up = 2 items (indices 0-1)
       return 1;
     } else {
-      // Logged-in navigation: Home + Session History + Notifications + Profile + Settings = 5 items (indices 0-4)
-      return 4;
+      // Client navigation: Home + Sessions/History + Settings = 3 items (indices 0-2)
+      return 2;
     }
   }
 
@@ -80,26 +82,16 @@ class _MainNavigationState extends State<MainNavigation>
       }
     }
 
-    // For logged-in users, use the original logic
+    // For logged-in clients, use the simplified 3-tab structure
     switch (_currentIndex) {
       case 0:
         return const HomeScreen(key: ValueKey('home'));
       case 1:
         return Container(
           key: const ValueKey('history'),
-          child: _buildSessionHistoryScreen(appState, theme),
+          child: const SessionsHistoryScreen(),
         );
       case 2:
-        return Container(
-          key: const ValueKey('notifications'),
-          child: const NotificationsScreen(),
-        );
-      case 3:
-        return Container(
-          key: const ValueKey('profile'),
-          child: _buildProfileScreen(appState, theme),
-        );
-      case 4:
         return Container(
           key: const ValueKey('settings'),
           child: _buildSettingsScreen(appState, theme),
@@ -120,35 +112,50 @@ class _MainNavigationState extends State<MainNavigation>
       _currentIndex = 0;
     }
 
-    return Scaffold(
-      body: Column(
-        children: [
-          const CallStatusBar(),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 400),
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0.1, 0.0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  ),
-                );
-              },
-              child: _getCurrentScreen(appState, theme),
+    return WillPopScope(
+      onWillPop: () async {
+        // If we're on the main tabs (not a nested page), exit the app
+        if (_currentIndex == 0) {
+          SystemNavigator.pop();
+          return false;
+        } else {
+          // If we're on a sub-tab, go back to home
+          setState(() {
+            _currentIndex = 0;
+          });
+          return false;
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            const CallStatusBar(),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.1, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  );
+                },
+                child: _getCurrentScreen(appState, theme),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: appState.currentUser == null
+            ? _buildGuestBottomNavigationBar(appState, theme)
+            : _buildClientBottomNavigationBar(appState, theme),
       ),
-      bottomNavigationBar: appState.currentUser == null
-          ? _buildGuestBottomNavigationBar(appState, theme)
-          : _buildLoggedInBottomNavigationBar(appState, theme),
     );
   }
 
@@ -207,7 +214,7 @@ class _MainNavigationState extends State<MainNavigation>
     );
   }
 
-  Widget _buildLoggedInBottomNavigationBar(AppState appState, ThemeData theme) {
+  Widget _buildClientBottomNavigationBar(AppState appState, ThemeData theme) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -244,80 +251,10 @@ class _MainNavigationState extends State<MainNavigation>
             activeIcon: Icon(Icons.home),
             label: appState.translate('home'),
           ),
-          // Only show session history for logged-in users
-          if (appState.currentUser != null)
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history_outlined),
-              activeIcon: Icon(Icons.history),
-              label: appState.translate('session_history'),
-            ),
-          // Only show notifications for logged-in users
-          if (appState.currentUser != null)
-            BottomNavigationBarItem(
-              icon: Stack(
-                children: [
-                  Icon(Icons.notifications_outlined),
-                  if (appState.pendingNotifications.isNotEmpty)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: Text(
-                          '${appState.pendingNotifications.length}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              activeIcon: Stack(
-                children: [
-                  Icon(Icons.notifications),
-                  if (appState.pendingNotifications.isNotEmpty)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: Text(
-                          '${appState.pendingNotifications.length}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              label: appState.translate('notifications'),
-            ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: appState.translate('profile'),
+            icon: Icon(Icons.history_outlined),
+            activeIcon: Icon(Icons.history),
+            label: appState.translate('session_history'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),

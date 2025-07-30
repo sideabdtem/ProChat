@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../screens/guest_home_screen.dart';
@@ -40,33 +41,40 @@ class _GuestMainNavigationState extends State<GuestMainNavigation> {
     final appState = context.watch<AppState>();
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _widgetOptions,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-            activeIcon: const Icon(Icons.home),
-            label: _getLocalizedText('home', appState),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.login_outlined),
-            activeIcon: const Icon(Icons.login),
-            label: _getLocalizedText('sign_in', appState),
-          ),
-        ],
-        currentIndex:
-            _selectedIndex > 1 ? 0 : _selectedIndex, // Ensure index is valid
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: theme.colorScheme.surface,
-        selectedFontSize: 12,
-        unselectedFontSize: 10,
+    return WillPopScope(
+      onWillPop: () async {
+        // Exit the app when back is pressed on guest navigation
+        SystemNavigator.pop();
+        return false;
+      },
+      child: Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _widgetOptions,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: _getLocalizedText('home', appState),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.login_outlined),
+              activeIcon: const Icon(Icons.login),
+              label: _getLocalizedText('sign_in', appState),
+            ),
+          ],
+          currentIndex:
+              _selectedIndex > 1 ? 0 : _selectedIndex, // Ensure index is valid
+          selectedItemColor: theme.colorScheme.primary,
+          unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
+          onTap: _onItemTapped,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: theme.colorScheme.surface,
+          selectedFontSize: 12,
+          unselectedFontSize: 10,
+        ),
       ),
     );
   }

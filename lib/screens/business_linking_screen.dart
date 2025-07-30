@@ -144,6 +144,7 @@ class _BusinessLinkingScreenState extends State<BusinessLinkingScreen>
         backgroundColor: theme.colorScheme.surface,
         foregroundColor: theme.colorScheme.onSurface,
         elevation: 0,
+        automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: _tabController,
           labelColor: theme.colorScheme.primary,

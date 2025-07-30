@@ -31,25 +31,23 @@ class _SessionsHistoryScreenState extends State<SessionsHistoryScreen> {
     
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: theme.colorScheme.primary,
-        elevation: 0,
-        title: Text(
-          isRTL ? 'تاريخ الجلسات' : 'Sessions History',
-          style: theme.textTheme.headlineSmall?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-      ),
       body: Column(
         children: [
+          // Header with title
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Text(
+                  isRTL ? 'تاريخ الجلسات' : 'Sessions History',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           // Filter Options
           Container(
             padding: const EdgeInsets.all(16),

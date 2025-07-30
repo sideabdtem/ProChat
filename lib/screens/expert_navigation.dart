@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../models/app_models.dart';
@@ -125,23 +126,44 @@ class _ExpertNavigationState extends State<ExpertNavigation>
     final appState = context.watch<AppState>();
     final theme = Theme.of(context);
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.1, 0.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        );
+    return WillPopScope(
+      onWillPop: () async {
+        // If there's an overlay screen, close it first
+        if (_overlayScreen != null) {
+          closeOverlay();
+          return false;
+        }
+        
+        // If we're on the main tabs (not a nested page), exit the app
+        if (_currentIndex == 0) {
+          SystemNavigator.pop();
+          return false;
+        } else {
+          // If we're on a sub-tab, go back to home
+          setState(() {
+            _currentIndex = 0;
+          });
+          return false;
+        }
       },
-      child: _getCurrentScreen(appState, theme),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 400),
+        switchInCurve: Curves.easeInOut,
+        switchOutCurve: Curves.easeInOut,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.1, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+          );
+        },
+        child: _getCurrentScreen(appState, theme),
+      ),
     );
   }
 
