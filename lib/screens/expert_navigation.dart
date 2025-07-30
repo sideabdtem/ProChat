@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_service.dart';
 import '../models/app_models.dart';
 import '../screens/expert_dashboard.dart';
 import '../screens/expert_settings_screen.dart';
@@ -44,6 +45,20 @@ class _ExpertNavigationState extends State<ExpertNavigation>
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     _animationController.forward();
+    
+    // Clear any existing overlay when initializing
+    _overlayScreen = null;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Ensure we have a clean state when dependencies change
+    final appState = context.read<AppState>();
+    if (appState.currentUser?.userType != UserType.expert) {
+      // If user is not an expert, clear overlay and reset state
+      _overlayScreen = null;
+    }
   }
 
   @override
@@ -125,23 +140,42 @@ class _ExpertNavigationState extends State<ExpertNavigation>
     final appState = context.watch<AppState>();
     final theme = Theme.of(context);
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.1, 0.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
+    // Ensure we're showing expert navigation only for expert users
+    if (appState.currentUser?.userType != UserType.expert) {
+      // If user is not an expert, return to main app screen
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        NavigationService.navigateToMainApp(context);
+      });
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    return Scaffold(
+      body: Column(
+        children: [
+          const CallStatusBar(),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.1, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                );
+              },
+              child: _getCurrentScreen(appState, theme),
+            ),
           ),
-        );
-      },
-      child: _getCurrentScreen(appState, theme),
+        ],
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(appState, theme),
     );
   }
 

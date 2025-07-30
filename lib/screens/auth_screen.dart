@@ -9,6 +9,7 @@ import '../screens/expert_navigation.dart';
 import '../screens/expert_signup_page.dart';
 import '../screens/main_app_screen.dart';
 import '../screens/admin_dashboard_page.dart';
+import '../services/navigation_service.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -502,11 +503,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (success) {
         Navigator.pop(context); // Close dialog
 
-        // Navigate to main app screen which handles routing
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainAppScreen()),
-        );
+        // Use navigation service to ensure clean state transition
+        NavigationService.clearNavigationStack(context);
       } else {
         throw Exception('Authentication failed');
       }

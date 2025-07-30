@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../services/auth_service.dart';
 import '../services/b2b_service.dart';
+import '../services/navigation_service.dart';
 import '../models/app_models.dart';
 import '../screens/main_navigation.dart';
 import '../screens/expert_navigation.dart';
@@ -37,6 +38,11 @@ class _MainAppScreenState extends State<MainAppScreen> {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (context, appState, child) {
+        // Clear any navigation state when user changes
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _clearNavigationState();
+        });
+
         // If user is logged in, show appropriate navigation
         if (appState.currentUser != null) {
           switch (appState.currentUser!.userType) {
@@ -61,5 +67,20 @@ class _MainAppScreenState extends State<MainAppScreen> {
         return const GuestMainNavigation();
       },
     );
+  }
+
+  void _clearNavigationState() {
+    // Clear any navigation state that might cause conflicts
+    // This ensures clean state when switching between guest and authenticated modes
+    final appState = context.read<AppState>();
+    
+    // Reset any overlay screens or navigation state
+    if (appState.currentUser != null) {
+      // Ensure we're starting with a clean navigation state for authenticated users
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Force rebuild of navigation components
+        setState(() {});
+      });
+    }
   }
 }

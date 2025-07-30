@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_service.dart';
 import '../models/app_models.dart';
 import '../screens/main_navigation.dart';
 import '../screens/expert_navigation.dart';
@@ -9,6 +10,9 @@ import '../screens/auth_screen.dart';
 
 /// A reusable navigation wrapper that provides consistent bottom navigation
 /// across all screens in the app for logged-in users
+/// 
+/// NOTE: This wrapper should only be used for specific screens that need
+/// custom navigation, not for the main app navigation flow
 class NavigationWrapper extends StatelessWidget {
   final Widget child;
   final int? selectedIndex;
@@ -26,10 +30,28 @@ class NavigationWrapper extends StatelessWidget {
     final appState = context.watch<AppState>();
     final theme = Theme.of(context);
     
+    // Don't show navigation wrapper if we're in the main navigation flow
+    // This prevents conflicts with the main navigation systems
+    if (_isInMainNavigationFlow(context)) {
+      return child;
+    }
+    
     return Scaffold(
       body: child,
       bottomNavigationBar: _buildBottomNavigationBar(appState, theme, context),
     );
+  }
+
+  bool _isInMainNavigationFlow(BuildContext context) {
+    // Check if we're already in a main navigation widget
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      final routeName = route.settings.name;
+      return routeName?.contains('MainNavigation') == true ||
+             routeName?.contains('ExpertNavigation') == true ||
+             routeName?.contains('GuestMainNavigation') == true;
+    }
+    return false;
   }
 
   Widget _buildBottomNavigationBar(AppState appState, ThemeData theme, BuildContext context) {
@@ -190,40 +212,17 @@ class NavigationWrapper extends StatelessWidget {
       // Guest user navigation
       if (index == 0) {
         // Navigate to guest home
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const GuestMainNavigation(),
-          ),
-          (route) => false,
-        );
+        NavigationService.navigateToGuestNavigation(context);
       } else if (index == 1) {
         // Navigate to auth screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AuthScreen(),
-          ),
-        );
+        NavigationService.navigateToAuth(context);
       }
     } else if (isExpert) {
       // Expert navigation
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ExpertNavigation(initialIndex: index),
-        ),
-        (route) => false,
-      );
+      NavigationService.navigateToExpertNavigation(context, initialIndex: index);
     } else {
       // Regular user navigation
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainNavigation(initialIndex: index),
-        ),
-        (route) => false,
-      );
+      NavigationService.navigateToMainNavigation(context, initialIndex: index);
     }
   }
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_service.dart';
 import '../screens/guest_home_screen.dart';
 import '../screens/auth_screen.dart';
+import '../screens/main_app_screen.dart';
 
 class GuestMainNavigation extends StatefulWidget {
   const GuestMainNavigation({super.key});
@@ -18,6 +20,19 @@ class _GuestMainNavigationState extends State<GuestMainNavigation> {
     GuestHomeScreenContent(),
     GuestHomeScreenContent(), // Placeholder - navigation will handle auth screen
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if user is now authenticated and redirect if needed
+    final appState = context.read<AppState>();
+    if (appState.currentUser != null) {
+      // If user is now authenticated, redirect to main app screen
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        NavigationService.navigateToMainApp(context);
+      });
+    }
+  }
 
   void _onItemTapped(int index) {
     if (index == 1) {
@@ -39,6 +54,13 @@ class _GuestMainNavigationState extends State<GuestMainNavigation> {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     final theme = Theme.of(context);
+
+    // If user is authenticated, show loading while redirecting
+    if (appState.currentUser != null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return Scaffold(
       body: IndexedStack(

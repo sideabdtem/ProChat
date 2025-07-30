@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_service.dart';
 import '../models/app_models.dart';
 import '../screens/home_screen.dart';
 import '../screens/auth_screen.dart';
@@ -9,6 +10,7 @@ import '../screens/edit_profile_screen.dart';
 import '../screens/payment_methods_screen.dart';
 import '../screens/notifications_screen.dart';
 import '../widgets/call_status_bar.dart';
+import '../screens/main_app_screen.dart'; // Added import for MainAppScreen
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
@@ -46,6 +48,14 @@ class _MainNavigationState extends State<MainNavigation>
     final appState = context.read<AppState>();
     final maxIndex = _getMaxNavigationIndex(appState);
     _currentIndex = widget.initialIndex <= maxIndex ? widget.initialIndex : 0;
+    
+    // Ensure we're showing the correct navigation for the current user type
+    if (appState.currentUser?.userType == UserType.expert) {
+      // If user is an expert, redirect to expert navigation
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        NavigationService.navigateToMainApp(context);
+      });
+    }
   }
 
   int _getMaxNavigationIndex(AppState appState) {
