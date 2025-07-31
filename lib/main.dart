@@ -1,3 +1,4 @@
+// lib/main.dart - Updated main entry point
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +11,7 @@ import 'services/b2b_service.dart';
 import 'services/wallet_service.dart';
 import 'services/firebase_service.dart';
 import 'models/app_models.dart';
-import 'screens/main_app_screen.dart';
-import 'services/auth_service.dart';
+import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,6 @@ void main() async {
 
   // Hide overflow indicators globally
   if (kDebugMode) {
-    // Suppress overflow debug warnings in development
     ErrorWidget.builder = (FlutterErrorDetails details) {
       if (details.exception.toString().contains('RenderFlex overflow')) {
         return Container();
@@ -53,7 +52,6 @@ class MyApp extends StatelessWidget {
               return AppState();
             } catch (e) {
               print('Error creating AppState: $e');
-              // Return a minimal fallback AppState
               return AppState();
             }
           },
@@ -69,13 +67,12 @@ class MyApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: appState.themeMode,
             navigatorKey: NavigationService.navigatorKey,
-            home: const MainAppScreen(),
+            home: const SplashScreen(), // Always start with splash
             debugShowCheckedModeBanner: false,
             debugShowMaterialGrid: false,
             builder: (context, child) {
               return Directionality(
-                textDirection:
-                    appState.isRTL ? TextDirection.rtl : TextDirection.ltr,
+                textDirection: appState.isRTL ? TextDirection.rtl : TextDirection.ltr,
                 child: MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: child!,
