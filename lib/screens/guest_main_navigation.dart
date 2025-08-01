@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_manager.dart';
 import '../screens/guest_home_screen.dart';
 import '../screens/auth_screen.dart';
 
@@ -20,53 +21,60 @@ class _GuestMainNavigationState extends State<GuestMainNavigation> {
   ];
 
   void _onItemTapped(int index) {
+    final navigationManager = context.read<NavigationManager>();
+    
     if (index == 1) {
       // Navigate to auth screen when Sign In/Up tab is tapped
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const AuthScreen(),
-        ),
-      );
+      navigationManager.navigateToAuthScreen(context);
     } else {
       setState(() {
         _selectedIndex = index;
       });
+      navigationManager.setCurrentTabIndex(index);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final navigationManager = context.read<NavigationManager>();
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _widgetOptions,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-            activeIcon: const Icon(Icons.home),
-            label: _getLocalizedText('home', appState),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.login_outlined),
-            activeIcon: const Icon(Icons.login),
-            label: _getLocalizedText('sign_in', appState),
-          ),
-        ],
-        currentIndex:
-            _selectedIndex > 1 ? 0 : _selectedIndex, // Ensure index is valid
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: theme.colorScheme.surface,
-        selectedFontSize: 12,
-        unselectedFontSize: 10,
+    // Update navigation manager state
+    navigationManager.setCurrentTabIndex(_selectedIndex);
+
+    return WillPopScope(
+      onWillPop: () async {
+        return await navigationManager.handleBackButton(context);
+      },
+      child: Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _widgetOptions,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: _getLocalizedText('home', appState),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.login_outlined),
+              activeIcon: const Icon(Icons.login),
+              label: _getLocalizedText('sign_in', appState),
+            ),
+          ],
+          currentIndex:
+              _selectedIndex > 1 ? 0 : _selectedIndex, // Ensure index is valid
+          selectedItemColor: theme.colorScheme.primary,
+          unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
+          onTap: _onItemTapped,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: theme.colorScheme.surface,
+          selectedFontSize: 12,
+          unselectedFontSize: 10,
+        ),
       ),
     );
   }

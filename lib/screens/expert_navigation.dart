@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_manager.dart';
 import '../models/app_models.dart';
 import '../screens/expert_dashboard.dart';
 import '../screens/expert_settings_screen.dart';
@@ -123,25 +124,34 @@ class _ExpertNavigationState extends State<ExpertNavigation>
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final navigationManager = context.read<NavigationManager>();
     final theme = Theme.of(context);
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.1, 0.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        );
+    // Update navigation manager state
+    navigationManager.setCurrentTabIndex(_currentIndex);
+
+    return WillPopScope(
+      onWillPop: () async {
+        return await navigationManager.handleBackButton(context);
       },
-      child: _getCurrentScreen(appState, theme),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 400),
+        switchInCurve: Curves.easeInOut,
+        switchOutCurve: Curves.easeInOut,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.1, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+          );
+        },
+        child: _getCurrentScreen(appState, theme),
+      ),
     );
   }
 
@@ -170,6 +180,7 @@ class _ExpertNavigationState extends State<ExpertNavigation>
             });
             _animationController.reset();
             _animationController.forward();
+            context.read<NavigationManager>().setCurrentTabIndex(index);
           },
           type: BottomNavigationBarType.fixed,
           backgroundColor: theme.colorScheme.surface,
