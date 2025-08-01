@@ -10,6 +10,7 @@ import 'services/auth_service.dart';
 import 'services/b2b_service.dart';
 import 'services/wallet_service.dart';
 import 'services/firebase_service.dart';
+import 'services/navigation_manager.dart';
 import 'models/app_models.dart';
 import 'screens/splash_screen.dart';
 
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (context) => B2BService()),
         ChangeNotifierProvider(create: (context) => WalletService()),
+        ChangeNotifierProvider(create: (context) => NavigationManager()),
       ],
       child: Consumer<AppState>(
         builder: (context, appState, child) {

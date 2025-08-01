@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../services/auth_service.dart';
+import '../services/navigation_manager.dart';
 import '../models/app_models.dart';
 import '../screens/main_navigation.dart';
 import '../screens/guest_main_navigation.dart';
@@ -502,11 +503,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (success) {
         Navigator.pop(context); // Close dialog
 
-        // Navigate to main app screen which handles routing
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainAppScreen()),
-        );
+        // Save user session and navigate to role-based home
+        final navigationManager = context.read<NavigationManager>();
+        await AuthService.saveUserSession(dummyUser);
+        navigationManager.navigateToRoleBasedHome(context, dummyUser);
       } else {
         throw Exception('Authentication failed');
       }

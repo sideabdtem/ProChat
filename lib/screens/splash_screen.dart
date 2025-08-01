@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../services/auth_service.dart';
+import '../services/navigation_manager.dart';
 import '../models/app_models.dart';
 import 'auth_screen.dart';
 import 'guest_main_navigation.dart';
@@ -56,56 +57,27 @@ class _SplashScreenState extends State<SplashScreen>
       
       if (mounted) {
         final appState = context.read<AppState>();
+        final navigationManager = context.read<NavigationManager>();
         
         if (savedUser != null) {
           // User is logged in, set the current user
           appState.setCurrentUser(savedUser);
-          _navigateToRoleBasedHome(savedUser);
+          navigationManager.navigateToRoleBasedHome(context, savedUser);
         } else {
           // No saved session, navigate to guest navigation
-          _navigateToGuestNavigation();
+          navigationManager.navigateToGuestNavigation(context);
         }
       }
     } catch (e) {
       print('Error initializing app: $e');
       if (mounted) {
-        _navigateToGuestNavigation();
+        final navigationManager = context.read<NavigationManager>();
+        navigationManager.navigateToGuestNavigation(context);
       }
     }
   }
 
-  void _navigateToRoleBasedHome(AppUser user) {
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) {
-          switch (user.userType) {
-            case UserType.expert:
-              return const ExpertNavigation(initialIndex: 0);
-            case UserType.client:
-              return const MainNavigation(initialIndex: 0);
-          }
-        },
-        transitionDuration: const Duration(milliseconds: 300),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    );
-  }
 
-  void _navigateToGuestNavigation() {
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return const GuestMainNavigation();
-        },
-        transitionDuration: const Duration(milliseconds: 300),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    );
-  }
 
   @override
   void dispose() {
