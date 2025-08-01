@@ -9,6 +9,7 @@ import '../screens/edit_profile_screen.dart';
 import '../screens/payment_methods_screen.dart';
 import '../screens/notifications_screen.dart';
 import '../widgets/call_status_bar.dart';
+import '../services/navigation_manager.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
@@ -120,35 +121,42 @@ class _MainNavigationState extends State<MainNavigation>
       _currentIndex = 0;
     }
 
-    return Scaffold(
-      body: Column(
-        children: [
-          const CallStatusBar(),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 400),
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0.1, 0.0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  ),
-                );
-              },
-              child: _getCurrentScreen(appState, theme),
-            ),
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () => NavigationManager.handleWillPop(
+        context: context,
+        currentTabIndex: _currentIndex,
+        setTabIndex: (index) => setState(() => _currentIndex = index),
       ),
-      bottomNavigationBar: appState.currentUser == null
-          ? _buildGuestBottomNavigationBar(appState, theme)
-          : _buildLoggedInBottomNavigationBar(appState, theme),
+      child: Scaffold(
+        body: Column(
+          children: [
+            const CallStatusBar(),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.1, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  );
+                },
+                child: _getCurrentScreen(appState, theme),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: appState.currentUser == null
+            ? _buildGuestBottomNavigationBar(appState, theme)
+            : _buildLoggedInBottomNavigationBar(appState, theme),
+      ),
     );
   }
 

@@ -7,8 +7,6 @@ import '../screens/main_navigation.dart';
 import '../screens/guest_main_navigation.dart';
 import '../screens/expert_navigation.dart';
 import '../screens/expert_signup_page.dart';
-import '../screens/main_app_screen.dart';
-import '../screens/admin_dashboard_page.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -502,10 +500,25 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (success) {
         Navigator.pop(context); // Close dialog
 
-        // Navigate to main app screen which handles routing
+        // Navigate to role-based home directly
+        final user = appState.currentUser!;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MainAppScreen()),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+              switch (user.userType) {
+                case UserType.expert:
+                  return const ExpertNavigation(initialIndex: 0);
+                case UserType.client:
+                default:
+                  return const MainNavigation(initialIndex: 0);
+              }
+            },
+            transitionDuration: const Duration(milliseconds: 300),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         );
       } else {
         throw Exception('Authentication failed');

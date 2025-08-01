@@ -14,6 +14,7 @@ import '../screens/appointment_booking_screen.dart';
 import '../screens/chat_screen.dart';
 import '../screens/team_page_screen.dart';
 import '../widgets/call_status_bar.dart';
+import '../services/navigation_manager.dart';
 
 class ExpertNavigation extends StatefulWidget {
   final int initialIndex;
@@ -125,23 +126,37 @@ class _ExpertNavigationState extends State<ExpertNavigation>
     final appState = context.watch<AppState>();
     final theme = Theme.of(context);
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.1, 0.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
+    return WillPopScope(
+      onWillPop: () async {
+        // If an overlay (inner page) is open, close it first.
+        if (_overlayScreen != null) {
+          closeOverlay();
+          return false; // Prevent popping the main navigator
+        }
+        return NavigationManager.handleWillPop(
+          context: context,
+          currentTabIndex: _currentIndex,
+          setTabIndex: (index) => setState(() => _currentIndex = index),
         );
       },
-      child: _getCurrentScreen(appState, theme),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 400),
+        switchInCurve: Curves.easeInOut,
+        switchOutCurve: Curves.easeInOut,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.1, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+          );
+        },
+        child: _getCurrentScreen(appState, theme),
+      ),
     );
   }
 
