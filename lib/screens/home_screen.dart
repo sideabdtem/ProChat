@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../services/dummy_data.dart';
+import '../services/navigation_manager.dart';
 import '../models/app_models.dart';
 import '../screens/category_details_screen.dart';
 import '../screens/expert_profile_screen.dart';
@@ -386,10 +387,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     if (widget.onNavigateToBooking != null) {
       widget.onNavigateToBooking!(expert);
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => AppointmentBookingScreen(expert: expert),
-        ),
+      NavigationManager().navigateToInnerPage(
+        context,
+        AppointmentBookingScreen(expert: expert),
+        routeName: '/booking/${expert.id}',
       );
     }
   }
@@ -433,10 +434,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     if (widget.onNavigateToExpert != null) {
       widget.onNavigateToExpert!(expert);
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ExpertProfileScreen(expert: expert),
-        ),
+      // Use NavigationManager for inner page navigation
+      NavigationManager().navigateToInnerPage(
+        context,
+        ExpertProfileScreen(expert: expert),
+        routeName: '/expert-profile/${expert.id}',
       );
     }
   }
@@ -1022,10 +1024,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         if (widget.onNavigateToCategory != null) {
           widget.onNavigateToCategory!(category);
         } else {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CategoryDetailsScreen(category: category),
-            ),
+          NavigationManager().navigateToInnerPage(
+            context,
+            CategoryDetailsScreen(category: category),
+            routeName: '/category/${category.name}',
           );
         }
       },

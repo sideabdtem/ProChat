@@ -1,3 +1,10 @@
+// DEPRECATED: This file is no longer needed. Navigation is now handled by:
+// - SplashScreen for initial routing
+// - NavigationManager for centralized navigation state
+// - Role-specific navigation screens (GuestMainNavigation, MainNavigation, ExpertNavigation)
+//
+// Please use NavigationManager.navigateToRoleBasedHome() for role-based navigation
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
@@ -8,6 +15,7 @@ import '../screens/main_navigation.dart';
 import '../screens/expert_navigation.dart';
 import '../screens/guest_main_navigation.dart';
 
+@Deprecated('Use SplashScreen and NavigationManager instead')
 class MainAppScreen extends StatefulWidget {
   const MainAppScreen({super.key});
 
