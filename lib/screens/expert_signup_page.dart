@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../services/auth_service.dart';
+import '../services/navigation_manager.dart';
 import '../models/app_models.dart';
-import '../screens/main_app_screen.dart';
 
 class ExpertSignUpPage extends StatefulWidget {
   const ExpertSignUpPage({super.key});
@@ -245,11 +245,8 @@ class _ExpertSignUpPageState extends State<ExpertSignUpPage> {
       await AuthService.saveUserSession(user);
       appState.setCurrentUser(user);
 
-      // Navigate to main app screen and let it handle routing to expert dashboard
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainAppScreen()),
-      );
+      // Navigate to expert navigation using NavigationManager
+      NavigationManager().navigateToRoleBasedHome(context, UserType.expert);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
