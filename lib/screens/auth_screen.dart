@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../services/auth_service.dart';
+import '../services/navigation_manager.dart';
 import '../models/app_models.dart';
 import '../screens/main_navigation.dart';
 import '../screens/guest_main_navigation.dart';
 import '../screens/expert_navigation.dart';
 import '../screens/expert_signup_page.dart';
-import '../screens/main_app_screen.dart';
 import '../screens/admin_dashboard_page.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -71,23 +71,35 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final navigationManager = context.watch<NavigationManager>();
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              theme.colorScheme.primary.withOpacity(0.95),
-              theme.colorScheme.secondary.withOpacity(0.85),
-              theme.colorScheme.primaryContainer.withOpacity(0.9),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        // Return to guest navigation on back button
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const GuestMainNavigation(),
           ),
-        ),
-        child: SafeArea(
-          child: _buildAuthPage(appState, theme),
+        );
+        return false;
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                theme.colorScheme.primary.withOpacity(0.95),
+                theme.colorScheme.secondary.withOpacity(0.85),
+                theme.colorScheme.primaryContainer.withOpacity(0.9),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: _buildAuthPage(appState, theme),
+          ),
         ),
       ),
     );
@@ -501,11 +513,24 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       if (success) {
         Navigator.pop(context); // Close dialog
+        
+        // Save user session for persistence
+        await AuthService.saveUserSession(appState.currentUser!);
 
-        // Navigate to main app screen which handles routing
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainAppScreen()),
+        // Navigate to role-based home screen
+        Widget destinationScreen;
+        switch (userType) {
+          case UserType.client:
+            destinationScreen = const MainNavigation(initialIndex: 0);
+            break;
+          case UserType.expert:
+            destinationScreen = const ExpertNavigation(initialIndex: 0);
+            break;
+        }
+
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => destinationScreen),
+          (route) => false,
         );
       } else {
         throw Exception('Authentication failed');
