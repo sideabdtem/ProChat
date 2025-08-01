@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_manager.dart';
 import '../screens/guest_home_screen.dart';
 import '../screens/auth_screen.dart';
 
@@ -19,6 +20,15 @@ class _GuestMainNavigationState extends State<GuestMainNavigation> {
     GuestHomeScreenContent(), // Placeholder - navigation will handle auth screen
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    // Set role to guest in NavigationManager
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NavigationManager>().setRole('guest');
+    });
+  }
+
   void _onItemTapped(int index) {
     if (index == 1) {
       // Navigate to auth screen when Sign In/Up tab is tapped
@@ -32,19 +42,24 @@ class _GuestMainNavigationState extends State<GuestMainNavigation> {
       setState(() {
         _selectedIndex = index;
       });
+      // Update NavigationManager
+      context.read<NavigationManager>().setTabIndex(index);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final navigationManager = context.watch<NavigationManager>();
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _widgetOptions,
-      ),
+    return WillPopScope(
+      onWillPop: () => navigationManager.handleBackButton(context),
+      child: Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _widgetOptions,
+        ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -67,6 +82,7 @@ class _GuestMainNavigationState extends State<GuestMainNavigation> {
         backgroundColor: theme.colorScheme.surface,
         selectedFontSize: 12,
         unselectedFontSize: 10,
+      ),
       ),
     );
   }

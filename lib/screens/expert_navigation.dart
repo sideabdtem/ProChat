@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../services/navigation_manager.dart';
 import '../models/app_models.dart';
 import '../screens/expert_dashboard.dart';
 import '../screens/expert_settings_screen.dart';
@@ -30,7 +31,6 @@ class _ExpertNavigationState extends State<ExpertNavigation>
   late Animation<double> _fadeAnimation;
 
   int _currentIndex = 0;
-  Widget? _overlayScreen;
 
   @override
   void initState() {
@@ -44,6 +44,13 @@ class _ExpertNavigationState extends State<ExpertNavigation>
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     _animationController.forward();
+    
+    // Set role to expert in NavigationManager
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final navigationManager = context.read<NavigationManager>();
+      navigationManager.setRole('expert');
+      navigationManager.setTabIndex(_currentIndex);
+    });
   }
 
   @override
@@ -54,37 +61,21 @@ class _ExpertNavigationState extends State<ExpertNavigation>
 
   // Method to navigate to screens while maintaining expert navigation
   void navigateToScreen(Widget screen) {
-    setState(() {
-      _overlayScreen = screen;
-    });
+    final navigationManager = context.read<NavigationManager>();
+    navigationManager.navigateToInnerPage(screen, '/expert/inner_page');
   }
 
   void closeOverlay() {
-    setState(() {
-      _overlayScreen = null;
-    });
+    final navigationManager = context.read<NavigationManager>();
+    navigationManager.goBackToMainTab();
   }
 
-  // Method to create expert-wrapped screens that maintain navigation
-  Widget _createExpertWrappedScreen(Widget screen) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const CallStatusBar(),
-          Expanded(child: screen),
-        ],
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(
-        context.watch<AppState>(),
-        Theme.of(context),
-      ),
-    );
-  }
 
-  Widget _getCurrentScreen(AppState appState, ThemeData theme) {
-    // If there's an overlay screen, show it with expert navigation
-    if (_overlayScreen != null) {
-      return _createExpertWrappedScreen(_overlayScreen!);
+
+  Widget _getCurrentScreen(AppState appState, ThemeData theme, NavigationManager navigationManager) {
+    // If there's an inner page, show it
+    if (!navigationManager.isOnMainTab && navigationManager.currentInnerPage != null) {
+      return navigationManager.currentInnerPage!;
     }
 
     switch (_currentIndex) {
@@ -92,19 +83,34 @@ class _ExpertNavigationState extends State<ExpertNavigation>
         return HomeScreen(
           key: const ValueKey('home'),
           onNavigateToExpert: (expert) {
-            navigateToScreen(ExpertProfileScreen(expert: expert));
+            navigationManager.navigateToInnerPage(
+              ExpertProfileScreen(expert: expert),
+              '/expert/expert_profile',
+            );
           },
           onNavigateToCategory: (category) {
-            navigateToScreen(CategoryDetailsScreen(category: category));
+            navigationManager.navigateToInnerPage(
+              CategoryDetailsScreen(category: category),
+              '/expert/category_details',
+            );
           },
           onNavigateToBooking: (expert) {
-            navigateToScreen(AppointmentBookingScreen(expert: expert));
+            navigationManager.navigateToInnerPage(
+              AppointmentBookingScreen(expert: expert),
+              '/expert/appointment_booking',
+            );
           },
           onNavigateToTeam: (expert) {
-            navigateToScreen(TeamPageScreen(teamExpert: expert));
+            navigationManager.navigateToInnerPage(
+              TeamPageScreen(teamExpert: expert),
+              '/expert/team_page',
+            );
           },
           onNavigateToChat: (expert) {
-            navigateToScreen(ChatScreen(expert: expert));
+            navigationManager.navigateToInnerPage(
+              ChatScreen(expert: expert),
+              '/expert/chat',
+            );
           },
         );
       case 1:
@@ -123,29 +129,43 @@ class _ExpertNavigationState extends State<ExpertNavigation>
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final navigationManager = context.watch<NavigationManager>();
     final theme = Theme.of(context);
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.1, 0.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        );
-      },
-      child: _getCurrentScreen(appState, theme),
+    return WillPopScope(
+      onWillPop: () => navigationManager.handleBackButton(context),
+      child: Scaffold(
+        body: Column(
+          children: [
+            const CallStatusBar(),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.1, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  );
+                },
+                child: _getCurrentScreen(appState, theme, navigationManager),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: _buildBottomNavigationBar(appState, theme, navigationManager),
+      ),
     );
   }
 
-  Widget _buildBottomNavigationBar(AppState appState, ThemeData theme) {
+  Widget _buildBottomNavigationBar(AppState appState, ThemeData theme, NavigationManager navigationManager) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -164,12 +184,14 @@ class _ExpertNavigationState extends State<ExpertNavigation>
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-              _overlayScreen = null; // Close any overlay when switching tabs
-            });
-            _animationController.reset();
-            _animationController.forward();
+            if (index != _currentIndex) {
+              setState(() {
+                _currentIndex = index;
+              });
+              navigationManager.setTabIndex(index);
+              _animationController.reset();
+              _animationController.forward();
+            }
           },
           type: BottomNavigationBarType.fixed,
           backgroundColor: theme.colorScheme.surface,
