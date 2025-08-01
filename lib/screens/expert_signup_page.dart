@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import '../services/auth_service.dart';
 import '../models/app_models.dart';
-import '../screens/main_app_screen.dart';
+import '../screens/expert_navigation.dart';
 
 class ExpertSignUpPage extends StatefulWidget {
   const ExpertSignUpPage({super.key});
@@ -245,10 +245,17 @@ class _ExpertSignUpPageState extends State<ExpertSignUpPage> {
       await AuthService.saveUserSession(user);
       appState.setCurrentUser(user);
 
-      // Navigate to main app screen and let it handle routing to expert dashboard
+      // Navigate directly to ExpertNavigation
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainAppScreen()),
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const ExpertNavigation(initialIndex: 1), // Go to dashboard tab
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
